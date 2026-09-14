@@ -63,3 +63,7 @@ let isValid = verifyWebhookSignature(rawBody: body, signatureHeader: header, sig
 resource group `sdk-js` exposes. Response types use `AnyDecodable` (a loose JSON box) rather
 than fixed `Codable` models for every endpoint — defining a full model per response shape across
 27 resource groups is future work once real usage informs which ones are worth the strict typing.
+
+## Publishing a new version
+
+Push any change here (auto-syncs to the public mirror), then tag the **mirror** repo directly (`AzaMoney/tbbn-sdk-ios`, not this one) with the new version and push that tag — no separate submission step, SPM resolves any tag immediately. See `docs/architecture/sdk-publishing.md` for the complete runbook.
