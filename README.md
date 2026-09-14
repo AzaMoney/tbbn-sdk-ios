@@ -6,13 +6,12 @@
 
 # sdk-ios (`TBBNSDK` Swift Package)
 
-**Status: WORKING (source only) — untested.** This folder is a plain Swift Package, not an npm
+**Status: WORKING — build-verified via CI.** This folder is a plain Swift Package, not an npm
 package — it was never `@tbbn/sdk-ios`; that naming only applies to the real npm packages under
 `packages/sdk-*` (sdk-js, sdk-typescript, sdk-react, sdk-next, sdk-vue, sdk-rn). No Swift
-toolchain exists in the environment this was written in, so this code has not been compiled or
-run — see `.github/workflows/sdk-ios-ci.yml` for the build-verification run once this is pushed
-(needs a macOS runner). Written as a faithful translation of `packages/sdk-js/src/client.ts`'s
-full method surface (all 27 resource groups, Phase 0-13). Review before shipping to production.
+toolchain exists in this dev environment, so `.github/workflows/sdk-ios-ci.yml` (a macOS runner)
+is the only place this has ever actually been compiled. Written as a faithful translation of
+`packages/sdk-js/src/client.ts`'s full method surface (all 27 resource groups, Phase 0-13).
 
 Real Swift Package Manager layout (`Package.swift`, `Sources/TBBNSDK/*.swift`). `TbbnClient` is
 an `actor` (not a class) — safe to call concurrently from multiple tasks without callers needing
@@ -22,7 +21,7 @@ Depends on `swift-crypto` for webhook signature verification only.
 ```swift
 import TBBNSDK
 
-let client = TbbnClient(baseUrl: "https://sandbox-api.tbbnetwork.com", apiKey: "sk_sandbox_...")
+let client = TbbnClient(baseUrl: "https://api.tbbnetwork.com", apiKey: "sk_sandbox_...")
 
 let offer = try await client.offers.create([
     "fromSellerId": "...",
@@ -32,8 +31,22 @@ let offer = try await client.offers.create([
 ])
 ```
 
-Not yet published; add as a Swift Package dependency pointing at this folder (local path or a
-git remote) until it is.
+## Installing
+
+```swift
+.package(url: "https://github.com/AzaMoney/tbbn-sdk-ios", from: "0.1.0")
+```
+
+Or in Xcode: **File → Add Package Dependencies…** and paste
+`https://github.com/AzaMoney/tbbn-sdk-ios`.
+
+Swift Package Manager resolves dependencies directly from a git URL — there's no artifact
+registry to upload to the way npm/Maven Central/PyPI work. Since TBBN's main repository is
+private, `AzaMoney/tbbn-sdk-ios` is a small **public** mirror containing only this folder's
+source, kept in sync automatically by `.github/workflows/mirror-sdk-ios.yml` whenever this
+folder changes on `master`. Cutting a new consumer-facing version is a separate, manual step
+(tag the mirror repo directly) — the mirror's main branch always reflects the latest source, but
+existing tags never move.
 
 ## Webhook signature verification
 
