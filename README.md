@@ -16,7 +16,7 @@ In Xcode: **File → Add Package Dependencies…** and paste
 `https://github.com/AzaMoney/tbbn-sdk-ios`. Or in `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/AzaMoney/tbbn-sdk-ios", from: "0.1.0")
+.package(url: "https://github.com/AzaMoney/tbbn-sdk-ios", from: "0.2.0")
 ```
 
 ## Quick start
