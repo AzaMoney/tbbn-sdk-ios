@@ -1,5 +1,3 @@
-// Status: WORKING (source only) — untested. See Package.swift header for details.
-
 import Foundation
 
 public final class TradeEngineResource {
@@ -93,23 +91,6 @@ public final class OffersResource {
 
     public func counter(id: String, input: [String: Any?]) async throws -> AnyDecodable? {
         try await client.request("POST", "/v1/offers/\(id)/counter", body: input)
-    }
-}
-
-public final class ReservationsResource {
-    private unowned let client: TbbnClient
-    init(client: TbbnClient) { self.client = client }
-
-    public func lock(tradeSessionId: String) async throws -> AnyDecodable? {
-        try await client.request("POST", "/v1/reservations", body: ["tradeSessionId": tradeSessionId])
-    }
-
-    public func release(tradeSessionId: String) async throws -> AnyDecodable? {
-        try await client.request("POST", "/v1/reservations/release", body: ["tradeSessionId": tradeSessionId])
-    }
-
-    public func list(tradeSessionId: String) async throws -> AnyDecodable? {
-        try await client.request("GET", withQuery("/v1/reservations", ["tradeSessionId": tradeSessionId]))
     }
 }
 

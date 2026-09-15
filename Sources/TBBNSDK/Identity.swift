@@ -1,5 +1,3 @@
-// Status: WORKING (source only) — untested. See Package.swift header for details.
-
 import Foundation
 
 public final class AuthResource {

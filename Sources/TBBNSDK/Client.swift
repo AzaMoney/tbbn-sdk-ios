@@ -1,5 +1,3 @@
-// Status: WORKING (source only) — untested. See Package.swift header for details.
-
 import Foundation
 
 /// Thrown for any non-2xx API response. Mirrors the shared
@@ -14,7 +12,7 @@ public struct TbbnApiError: Error, CustomStringConvertible {
     public var description: String { "TbbnApiError(\(status), \(code)): \(message)" }
 }
 
-/// Client over the TBBN Platform API — Phase 0-13 resources. An `actor` since `URLSession`
+/// Client over the TBBN Platform API. An `actor` since `URLSession`
 /// requests can run concurrently across an app; every resource call is safely serialized
 /// through this type without callers needing their own locking.
 public actor TbbnClient {
@@ -38,7 +36,6 @@ public actor TbbnClient {
     public lazy var matching = MatchingResource(client: self)
     public lazy var recommendations = RecommendationsResource(client: self)
     public lazy var offers = OffersResource(client: self)
-    public lazy var reservations = ReservationsResource(client: self)
     public lazy var tradeSessions = TradeSessionsResource(client: self)
     public lazy var checkout = CheckoutResource(client: self)
     public lazy var billing = BillingResource(client: self)

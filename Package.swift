@@ -1,8 +1,5 @@
 // swift-tools-version:5.9
-// Status: WORKING (source only) — untested. No Swift toolchain exists in the environment this
-// was written in, so this code has not been compiled or run. Written as a faithful translation
-// of packages/sdk-js/src/client.ts's full method surface (all 27 resource groups, Phase 0-13).
-// Review before shipping to production.
+// TBBNSDK — Swift client for the TBBN Platform API.
 
 import PackageDescription
 
