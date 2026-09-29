@@ -7,7 +7,7 @@
 # TBBNSDK
 
 Swift client for the [TBBN Platform API](https://developer.tbbnetwork.com). Publish listings, manage offers and trade
-sessions, and verify webhooks. iOS 15+ / macOS 12+, `async`/`await` throughout. `TbbnClient`
+sessions, run Businesses, Branches and TBBN Space bookings, manage plan billing, and verify webhooks. iOS 15+ / macOS 12+, `async`/`await` throughout. `TbbnClient`
 is an actor, so it is safe to share across tasks.
 
 ## Install
@@ -16,7 +16,7 @@ In Xcode: **File → Add Package Dependencies…** and paste
 `https://github.com/AzaMoney/tbbn-sdk-ios`. Or in `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/AzaMoney/tbbn-sdk-ios", from: "0.2.0")
+.package(url: "https://github.com/AzaMoney/tbbn-sdk-ios", from: "0.3.0")
 ```
 
 ## Quick start
@@ -64,12 +64,12 @@ let ok = verifyWebhookSignature(rawBody: body, signatureHeader: header, signingS
 
 ## Errors
 
-Every non-2xx response throws `TbbnApiError` with `status`, `code`, `message`, and `requestId`. Quote the request id when asking
+Every non-2xx response throws `TbbnApiError` with `status`, `code`, `message`, `requestId` and, when the API sends it, `details`. Quote the request id when asking
 for help with a specific call.
 
 ## Resources
 
-`auth`, `merchants`, `apiKeys`, `sellers`, `listings`, `catalog`, `media`, `directory`, `search`, `tradeEngine`, `currency`, `localization`, `matching`, `recommendations`, `offers`, `tradeSessions`, `checkout`, `billing`, `notifications`, `webhooks`, `auditLogs`, `moderation`, `fraud`, `reputation`, `analytics`, `features`, `sandbox`. Each method maps one-to-one onto an API endpoint documented in the
+`auth`, `merchants`, `apiKeys`, `sellers`, `listings`, `catalog`, `media`, `directory`, `search`, `tradeEngine`, `currency`, `localization`, `matching`, `recommendations`, `offers`, `tradeSessions`, `checkout`, `billing`, `notifications`, `webhooks`, `auditLogs`, `moderation`, `fraud`, `reputation`, `analytics`, `features`, `sandbox`, `oauthClients`, `oauthLink`, `businesses`, `branches`, `businessMerchantLinks`, `space`, `merchantFeed`, `reviews`, `status`. Each method maps one-to-one onto an API endpoint documented in the
 [API reference](https://developer.tbbnetwork.com/merchant/docs/api).
 
 ## Support

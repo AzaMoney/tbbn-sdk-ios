@@ -109,6 +109,42 @@ public final class TradeSessionsResource {
     public func cancel(id: String, actingSellerId: String, reason: String? = nil) async throws -> AnyDecodable? {
         try await client.request("POST", "/v1/trade-sessions/\(id)/cancel", body: ["actingSellerId": actingSellerId, "reason": reason])
     }
+
+    /// The paid side closes a trade the other side never completed, once the hold has elapsed.
+    public func closeUnreciprocated(id: String, actingSellerId: String, note: String) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/trade-sessions/\(id)/close-unreciprocated", body: ["actingSellerId": actingSellerId, "note": note])
+    }
+
+    /// Peer-to-peer completion: either party confirms the exchange happened.
+    public func confirmScheduling(id: String, actingSellerId: String, confirmedByMerchantUserId: String? = nil) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/trade-sessions/\(id)/scheduling/confirm", body: ["actingSellerId": actingSellerId, "confirmedByMerchantUserId": confirmedByMerchantUserId])
+    }
+
+    public func failScheduling(id: String, actingSellerId: String, reason: String? = nil) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/trade-sessions/\(id)/scheduling/fail", body: ["actingSellerId": actingSellerId, "reason": reason])
+    }
+
+    /// Excuses the paid side from fulfilling once the counterparty hold has elapsed.
+    public func excuseFulfillment(id: String, note: String) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/trade-sessions/\(id)/excuse-fulfillment", body: ["note": note])
+    }
+
+    public func acknowledgeHoldTerms(id: String, actingSellerId: String? = nil) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/trade-sessions/\(id)/acknowledge-hold-terms", body: ["actingSellerId": actingSellerId])
+    }
+
+    /// Suggests a TBBN Space location for the exchange; the other side accepts it.
+    public func proposeSpace(id: String, branchId: String, actingSellerId: String? = nil) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/trade-sessions/\(id)/space-proposals", body: ["branchId": branchId, "actingSellerId": actingSellerId])
+    }
+
+    public func listSpaceProposals(id: String) async throws -> AnyDecodable? {
+        try await client.request("GET", "/v1/trade-sessions/\(id)/space-proposals")
+    }
+
+    public func acceptSpaceProposal(id: String, proposalId: String, actingSellerId: String? = nil) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/trade-sessions/\(id)/space-proposals/\(proposalId)/accept", body: ["actingSellerId": actingSellerId])
+    }
 }
 
 public final class CheckoutResource {

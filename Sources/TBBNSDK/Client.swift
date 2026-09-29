@@ -1,15 +1,55 @@
 import Foundation
 
-/// Thrown for any non-2xx API response. Mirrors the shared
-/// `{ "error": { "code", "message", "requestId" } }` envelope documented in openapi.yaml's Error
-/// schema.
-public struct TbbnApiError: Error, CustomStringConvertible {
+/// Thrown for any non-2xx API response. Reads the documented
+/// `{ "error": { "code", "message", "requestId" } }` envelope as well as the
+/// `{ "code", "message", "details" }` and `{ "statusCode", "message", "error" }` bodies some
+/// endpoints return, so `message` is always the API's own explanation.
+public struct TbbnApiError: Error, CustomStringConvertible, @unchecked Sendable {
     public let status: Int
     public let code: String
     public let message: String
     public let requestId: String?
+    /// Extra structured context some errors carry (for example which field failed), decoded with
+    /// `JSONSerialization`.
+    public let details: Any?
+
+    public init(status: Int, code: String, message: String, requestId: String?, details: Any? = nil) {
+        self.status = status
+        self.code = code
+        self.message = message
+        self.requestId = requestId
+        self.details = details
+    }
 
     public var description: String { "TbbnApiError(\(status), \(code)): \(message)" }
+
+    /// Builds the error from a response body, matching sdk-js's `parseApiError`.
+    static func fromBody(status: Int, data: Data) -> TbbnApiError {
+        let root = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
+        let envelope = root?["error"] as? [String: Any]
+        let source = envelope ?? root ?? [:]
+
+        func text(_ value: Any?) -> String? {
+            if let s = value as? String, !s.isEmpty { return s }
+            if let list = value as? [Any] {
+                let parts = list.compactMap { $0 as? String }
+                return parts.isEmpty ? nil : parts.joined(separator: "; ")
+            }
+            return nil
+        }
+
+        var code = source["code"] as? String
+        if code == nil, envelope == nil, let label = root?["error"] as? String {
+            code = label.uppercased().replacingOccurrences(of: " ", with: "_")
+        }
+        return TbbnApiError(
+            status: status,
+            code: code ?? "UNKNOWN_ERROR",
+            message: text(source["message"]) ?? "Request failed with status \(status)",
+            requestId: source["requestId"] as? String,
+            details: source["details"]
+        )
+    }
 }
 
 /// Client over the TBBN Platform API. An `actor` since `URLSession`
@@ -48,6 +88,15 @@ public actor TbbnClient {
     public lazy var analytics = AnalyticsResource(client: self)
     public lazy var features = FeaturesResource(client: self)
     public lazy var sandbox = SandboxResource(client: self)
+    public lazy var oauthClients = OAuthClientsResource(client: self)
+    public lazy var oauthLink = OAuthLinkResource(client: self)
+    public lazy var businesses = BusinessesResource(client: self)
+    public lazy var branches = BranchesResource(client: self)
+    public lazy var businessMerchantLinks = BusinessMerchantLinksResource(client: self)
+    public lazy var space = SpaceResource(client: self)
+    public lazy var merchantFeed = MerchantFeedResource(client: self)
+    public lazy var reviews = ReviewsResource(client: self)
+    public lazy var status = StatusResource(client: self)
 
     public init(baseUrl: String, apiKey: String? = nil, accessToken: String? = nil, session: URLSession = .shared) {
         self.baseUrl = baseUrl
@@ -88,13 +137,7 @@ public actor TbbnClient {
         }
 
         guard (200..<300).contains(httpResponse.statusCode) else {
-            let envelope = try? JSONDecoder().decode(ErrorEnvelope.self, from: data)
-            throw TbbnApiError(
-                status: httpResponse.statusCode,
-                code: envelope?.error?.code ?? "UNKNOWN_ERROR",
-                message: envelope?.error?.message ?? "Unknown error",
-                requestId: envelope?.error?.requestId
-            )
+            throw TbbnApiError.fromBody(status: httpResponse.statusCode, data: data)
         }
 
         return try JSONDecoder().decode(T.self, from: data)
@@ -103,15 +146,6 @@ public actor TbbnClient {
     private func compact(_ dict: [String: Any?]) -> [String: Any] {
         dict.compactMapValues { $0 }
     }
-}
-
-struct ErrorEnvelope: Decodable {
-    struct ErrorBody: Decodable {
-        let code: String?
-        let message: String?
-        let requestId: String?
-    }
-    let error: ErrorBody?
 }
 
 /// Builds the Idempotency-Key header, matching sdk-js's idempotencyHeader() helper.

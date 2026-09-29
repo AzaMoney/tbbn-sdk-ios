@@ -107,20 +107,17 @@ public final class SellersResource {
         try await client.request("POST", "/merchant/sellers/verify", body: input, extraHeaders: idempotencyHeader(idempotencyKey))
     }
 
-    public func requestLinkOtp(linkRequestId: String) async throws {
-        let _: AnyDecodable? = try await client.request("POST", "/v1/sellers/link/otp/request", body: ["linkRequestId": linkRequestId])
-    }
-
-    public func verifyEmail(linkRequestId: String, code: String) async throws -> AnyDecodable? {
-        try await client.request("POST", "/v1/sellers/link/otp/verify-email", body: ["linkRequestId": linkRequestId, "code": code])
-    }
-
-    public func verifyPhone(linkRequestId: String, code: String) async throws -> AnyDecodable? {
-        try await client.request("POST", "/v1/sellers/link/otp/verify-phone", body: ["linkRequestId": linkRequestId, "code": code])
+    /// A trade participant your platform tracks without a TBBN account (Growth and above).
+    public func createHeadless(merchantId: String, merchantSellerRef: String, name: String? = nil, idempotencyKey: String? = nil) async throws -> AnyDecodable? {
+        try await client.request("POST", "/merchant/sellers/headless", body: ["merchantId": merchantId, "merchantSellerRef": merchantSellerRef, "name": name], extraHeaders: idempotencyHeader(idempotencyKey))
     }
 
     public func get(id: String) async throws -> AnyDecodable? {
         try await client.request("GET", "/v1/sellers/\(id)")
+    }
+
+    public func listForMerchant(merchantId: String) async throws -> AnyDecodable? {
+        try await client.request("GET", withQuery("/v1/sellers", ["merchantId": merchantId]))
     }
 
     public func unlink(id: String, merchantId: String, idempotencyKey: String? = nil) async throws {
