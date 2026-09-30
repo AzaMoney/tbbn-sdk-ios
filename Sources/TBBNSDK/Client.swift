@@ -81,7 +81,6 @@ public actor TbbnClient {
     public lazy var billing = BillingResource(client: self)
     public lazy var notifications = NotificationsResource(client: self)
     public lazy var webhooks = WebhooksResource(client: self)
-    public lazy var auditLogs = AuditLogsResource(client: self)
     public lazy var moderation = ModerationResource(client: self)
     public lazy var fraud = FraudResource(client: self)
     public lazy var reputation = ReputationResource(client: self)

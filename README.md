@@ -69,7 +69,7 @@ for help with a specific call.
 
 ## Resources
 
-`auth`, `merchants`, `apiKeys`, `sellers`, `listings`, `catalog`, `media`, `directory`, `search`, `tradeEngine`, `currency`, `localization`, `matching`, `recommendations`, `offers`, `tradeSessions`, `checkout`, `billing`, `notifications`, `webhooks`, `auditLogs`, `moderation`, `fraud`, `reputation`, `analytics`, `features`, `sandbox`, `oauthClients`, `oauthLink`, `businesses`, `branches`, `businessMerchantLinks`, `space`, `merchantFeed`, `reviews`, `status`. Each method maps one-to-one onto an API endpoint documented in the
+`auth`, `merchants`, `apiKeys`, `sellers`, `listings`, `catalog`, `media`, `directory`, `search`, `tradeEngine`, `currency`, `localization`, `matching`, `recommendations`, `offers`, `tradeSessions`, `checkout`, `billing`, `notifications`, `webhooks`, `moderation`, `fraud`, `reputation`, `analytics`, `features`, `sandbox`, `oauthClients`, `oauthLink`, `businesses`, `branches`, `businessMerchantLinks`, `space`, `merchantFeed`, `reviews`, `status`. Each method maps one-to-one onto an API endpoint documented in the
 [API reference](https://developer.tbbnetwork.com/merchant/docs/api).
 
 ## Support

@@ -127,15 +127,6 @@ public final class WebhooksResource {
     }
 }
 
-public final class AuditLogsResource {
-    private unowned let client: TbbnClient
-    init(client: TbbnClient) { self.client = client }
-
-    public func list(query: [String: Any?] = [:]) async throws -> AnyDecodable? {
-        try await client.request("GET", withQuery("/v1/audit-logs", query))
-    }
-}
-
 public final class ModerationResource {
     private unowned let client: TbbnClient
     init(client: TbbnClient) { self.client = client }
