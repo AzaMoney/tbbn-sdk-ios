@@ -129,6 +129,12 @@ public final class TradeSessionsResource {
         try await client.request("POST", "/v1/trade-sessions/\(id)/excuse-fulfillment", body: ["note": note])
     }
 
+    /// A matching-only side reports how it settled on your platform: "completed", or "failed"
+    /// with a reason. Unreported sides are released as failed after 14 days.
+    public func reportExternalSettlement(id: String, side: String, outcome: String, reason: String? = nil) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/trade-sessions/\(id)/external-settlement", body: ["side": side, "outcome": outcome, "reason": reason])
+    }
+
     public func acknowledgeHoldTerms(id: String, actingSellerId: String? = nil) async throws -> AnyDecodable? {
         try await client.request("POST", "/v1/trade-sessions/\(id)/acknowledge-hold-terms", body: ["actingSellerId": actingSellerId])
     }
