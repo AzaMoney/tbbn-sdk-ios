@@ -135,6 +135,11 @@ public final class TradeSessionsResource {
         try await client.request("POST", "/v1/trade-sessions/\(id)/external-settlement", body: ["side": side, "outcome": outcome, "reason": reason])
     }
 
+    /// Extends a matching-only side's report deadline once, by 1–14 days, before it passes.
+    public func extendExternalSettlement(id: String, side: String, days: Int, reason: String) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/trade-sessions/\(id)/external-settlement/extend", body: ["side": side, "days": days, "reason": reason])
+    }
+
     public func acknowledgeHoldTerms(id: String, actingSellerId: String? = nil) async throws -> AnyDecodable? {
         try await client.request("POST", "/v1/trade-sessions/\(id)/acknowledge-hold-terms", body: ["actingSellerId": actingSellerId])
     }
