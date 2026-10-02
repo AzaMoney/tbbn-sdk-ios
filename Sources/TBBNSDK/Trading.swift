@@ -144,9 +144,23 @@ public final class TradeSessionsResource {
         try await client.request("POST", "/v1/trade-sessions/\(id)/acknowledge-hold-terms", body: ["actingSellerId": actingSellerId])
     }
 
-    /// Suggests a TBBN Space location for the exchange; the other side accepts it.
-    public func proposeSpace(id: String, branchId: String, actingSellerId: String? = nil) async throws -> AnyDecodable? {
-        try await client.request("POST", "/v1/trade-sessions/\(id)/space-proposals", body: ["branchId": branchId, "actingSellerId": actingSellerId])
+    /// Proposes a meeting place. With `spaceId` and `acceptTerms` true, the Space is booked in your
+    /// name (you pay for it) when the other trader accepts; a `branchId` alone proposes a location.
+    public func proposeSpace(
+        id: String,
+        branchId: String? = nil,
+        actingSellerId: String? = nil,
+        spaceId: String? = nil,
+        scheduledAt: String? = nil,
+        acceptTerms: Bool? = nil
+    ) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/trade-sessions/\(id)/space-proposals", body: [
+            "branchId": branchId,
+            "spaceId": spaceId,
+            "scheduledAt": scheduledAt,
+            "acceptTerms": acceptTerms,
+            "actingSellerId": actingSellerId,
+        ])
     }
 
     public func listSpaceProposals(id: String) async throws -> AnyDecodable? {

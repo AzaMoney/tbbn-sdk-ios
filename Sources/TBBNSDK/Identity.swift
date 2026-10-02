@@ -76,6 +76,11 @@ public final class MerchantsResource {
     public func changeRole(id: String, userId: String, role: String, idempotencyKey: String? = nil) async throws -> AnyDecodable? {
         try await client.request("PATCH", "/v1/merchants/\(id)/users/\(userId)/role", body: ["role": role], extraHeaders: idempotencyHeader(idempotencyKey))
     }
+
+    /// Removes someone from the Merchant team. The owner can't be removed.
+    public func removeUser(id: String, userId: String) async throws -> AnyDecodable? {
+        try await client.request("DELETE", "/v1/merchants/\(id)/users/\(userId)")
+    }
 }
 
 public final class ApiKeysResource {
