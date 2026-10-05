@@ -163,6 +163,11 @@ public final class TradeSessionsResource {
         ])
     }
 
+    /// Declines the other trader's meeting-place proposal. Nothing is booked.
+    public func declineSpaceProposal(id: String, proposalId: String, actingSellerId: String? = nil) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/trade-sessions/\(id)/space-proposals/\(proposalId)/decline", body: ["actingSellerId": actingSellerId])
+    }
+
     public func listSpaceProposals(id: String) async throws -> AnyDecodable? {
         try await client.request("GET", "/v1/trade-sessions/\(id)/space-proposals")
     }
