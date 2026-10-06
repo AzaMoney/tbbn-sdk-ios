@@ -192,10 +192,6 @@ public final class SandboxResource {
     private unowned let client: TbbnClient
     init(client: TbbnClient) { self.client = client }
 
-    public func provisionMerchant(displayName: String? = nil) async throws -> AnyDecodable? {
-        try await client.request("POST", "/v1/sandbox/merchants", body: ["displayName": displayName])
-    }
-
     public func fixtures() async throws -> AnyDecodable? {
         try await client.request("GET", "/v1/sandbox/fixtures")
     }
