@@ -81,6 +81,15 @@ public final class MerchantsResource {
     public func removeUser(id: String, userId: String) async throws -> AnyDecodable? {
         try await client.request("DELETE", "/v1/merchants/\(id)/users/\(userId)")
     }
+
+    /// The team's invitations waiting for an answer. inviteUser sends one; the person joins when they accept it.
+    public func listInvitations(id: String) async throws -> AnyDecodable? {
+        try await client.request("GET", "/v1/merchants/\(id)/invitations")
+    }
+
+    public func revokeInvitation(id: String, invitationId: String) async throws -> AnyDecodable? {
+        try await client.request("DELETE", "/v1/merchants/\(id)/invitations/\(invitationId)")
+    }
 }
 
 public final class ApiKeysResource {

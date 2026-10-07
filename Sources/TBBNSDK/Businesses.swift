@@ -29,6 +29,11 @@ public final class BusinessesResource {
     public func listUsers(businessId: String) async throws -> AnyDecodable? {
         try await client.request("GET", "/v1/businesses/\(businessId)/business-users")
     }
+
+    /// The team's invitations waiting for an answer.
+    public func listInvitations(businessId: String) async throws -> AnyDecodable? {
+        try await client.request("GET", "/v1/businesses/\(businessId)/invitations")
+    }
 }
 
 /// A Business's locations.
