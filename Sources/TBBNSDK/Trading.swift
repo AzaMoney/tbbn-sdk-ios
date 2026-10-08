@@ -65,6 +65,12 @@ public final class OffersResource {
     private unowned let client: TbbnClient
     init(client: TbbnClient) { self.client = client }
 
+    /// The trade quote for these items — show it, then pass its fingerprint to `create`.
+    public func quote(_ input: [String: Any?]) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/offers/quote", body: input)
+    }
+
+    /// `input` must include quoteFingerprint — the quote the sender was shown.
     public func create(_ input: [String: Any?]) async throws -> AnyDecodable? {
         try await client.request("POST", "/v1/offers", body: input)
     }
@@ -77,8 +83,18 @@ public final class OffersResource {
         try await client.request("GET", "/v1/offers/\(id)")
     }
 
-    public func accept(id: String, actingSellerId: String) async throws -> AnyDecodable? {
-        try await client.request("POST", "/v1/offers/\(id)/accept", body: ["actingSellerId": actingSellerId])
+    /// An offer's quote (locked once accepted) and whether each party has confirmed it.
+    public func getQuote(id: String) async throws -> AnyDecodable? {
+        try await client.request("GET", "/v1/offers/\(id)/quote")
+    }
+
+    public func acknowledgeQuote(id: String, quoteFingerprint: String, actingSellerId: String? = nil) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/offers/\(id)/quote/acknowledge", body: ["actingSellerId": actingSellerId, "quoteFingerprint": quoteFingerprint])
+    }
+
+    /// Accepting confirms the quote the recipient was shown (`getQuote`) and locks it.
+    public func accept(id: String, actingSellerId: String, quoteFingerprint: String) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/offers/\(id)/accept", body: ["actingSellerId": actingSellerId, "quoteFingerprint": quoteFingerprint])
     }
 
     public func reject(id: String, actingSellerId: String) async throws -> AnyDecodable? {

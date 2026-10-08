@@ -65,6 +65,11 @@ public final class MerchantsResource {
         try await client.request("GET", "/v1/merchants/\(id)/application-status")
     }
 
+    /// Every commission rate the merchant has set, newest first.
+    public func commissionRates(id: String) async throws -> AnyDecodable? {
+        try await client.request("GET", "/v1/merchants/\(id)/commission-rates")
+    }
+
     public func inviteUser(id: String, email: String, role: String, idempotencyKey: String? = nil) async throws -> AnyDecodable? {
         try await client.request("POST", "/v1/merchants/\(id)/users/invite", body: ["email": email, "role": role], extraHeaders: idempotencyHeader(idempotencyKey))
     }
