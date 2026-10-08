@@ -120,6 +120,11 @@ public final class SpaceResource {
         try await client.request("GET", withQuery("/v1/space/bookings", query))
     }
 
+    /// A location's spot board: who should be in each spot now, who's next, who's arriving.
+    public func spotBoard(branchId: String) async throws -> AnyDecodable? {
+        try await client.request("GET", "/v1/space/branches/\(branchId)/spot-board")
+    }
+
     public func paymentInfo(bookingId: String, token: String? = nil) async throws -> AnyDecodable? {
         try await client.request("GET", withQuery("/v1/space/bookings/\(bookingId)/payment-info", ["token": token]))
     }
