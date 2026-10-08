@@ -102,6 +102,11 @@ public final class TradeSessionsResource {
         try await client.request("GET", withQuery("/v1/trade-sessions", ["sellerId": sellerId]))
     }
 
+    /// Your Merchant's trade records for your books (ISO dates; default the last 90 days).
+    public func records(from: String? = nil, to: String? = nil) async throws -> AnyDecodable? {
+        try await client.request("GET", withQuery("/v1/trade-sessions/records", ["from": from, "to": to]))
+    }
+
     public func get(id: String) async throws -> AnyDecodable? {
         try await client.request("GET", "/v1/trade-sessions/\(id)")
     }
