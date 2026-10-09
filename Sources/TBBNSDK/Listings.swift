@@ -20,6 +20,11 @@ public final class ListingsResource {
         try await client.request("POST", "/merchant/listings/\(id)/availability", body: ["status": status])
     }
 
+    /// Your own catalogue, every status but deleted, newest first (`{data, nextCursor, counts}`).
+    public func listOwn(_ query: [String: Any?] = [:]) async throws -> AnyDecodable? {
+        try await client.request("GET", withQuery("/merchant/listings", query))
+    }
+
     public func replaceWants(id: String, wants: [[String: Any?]]) async throws -> AnyDecodable? {
         try await client.request("PUT", "/merchant/listings/\(id)/wants", body: ["wants": wants])
     }
