@@ -92,6 +92,11 @@ public final class WebhooksResource {
         try await client.request("GET", withQuery("/v1/webhooks/subscriptions", ["merchantId": merchantId]))
     }
 
+    /// Rename it ("name"), move it ("url") or change its "events"; the signing secret is kept.
+    public func updateSubscription(id: String, _ input: [String: Any?]) async throws -> AnyDecodable? {
+        try await client.request("PATCH", "/v1/webhooks/subscriptions/\(id)", body: input)
+    }
+
     /// Ownership comes from your credential.
     public func disableSubscription(id: String) async throws -> AnyDecodable? {
         try await client.request("POST", "/v1/webhooks/subscriptions/\(id)/disable")
