@@ -111,6 +111,11 @@ public final class SpaceResource {
         try await client.request("GET", "/v1/space/spaces/\(spaceId)/booking-terms")
     }
 
+    /// Bookable slots ("from": YYYY-MM-DD in the Space's time zone, "days": up to 62). A booking must start on an AVAILABLE slot.
+    public func availability(spaceId: String, _ query: [String: Any?] = [:]) async throws -> AnyDecodable? {
+        try await client.request("GET", withQuery("/v1/space/spaces/\(spaceId)/availability", query))
+    }
+
     /// A member booking must include `acceptTerms: true`.
     public func createBooking(_ input: [String: Any?]) async throws -> AnyDecodable? {
         try await client.request("POST", "/v1/space/bookings", body: input)

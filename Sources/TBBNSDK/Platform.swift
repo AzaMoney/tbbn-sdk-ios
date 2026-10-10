@@ -53,6 +53,11 @@ public final class BillingResource {
         try await client.request("POST", "/v1/billing/usage", body: input)
     }
 
+    /// Your Merchant's plan (its Business's) and this period's usage: your own count of each service beside the Business's total and the plan's allowance.
+    public func merchantSummary() async throws -> AnyDecodable? {
+        try await client.request("GET", "/v1/billing/merchant/summary")
+    }
+
     public func usageSummary(businessId: String, billingPeriodRef: String? = nil) async throws -> AnyDecodable? {
         try await client.request("GET", withQuery("/v1/billing/usage/\(businessId)", ["billingPeriodRef": billingPeriodRef]))
     }
