@@ -34,6 +34,11 @@ public final class LocalizationResource {
         try await client.request("GET", "/v1/localization/languages")
     }
 
+    /// Where the caller's connection seems to be: country, and region and city when known.
+    public func locate() async throws -> AnyDecodable? {
+        try await client.request("GET", "/v1/localization/locate")
+    }
+
     public func normalizePhone(phone: String) async throws -> AnyDecodable? {
         try await client.request("POST", "/v1/localization/normalize-phone", body: ["phone": phone])
     }
