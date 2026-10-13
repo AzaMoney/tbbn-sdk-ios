@@ -79,6 +79,11 @@ public final class DirectoryResource {
     public func get(id: String) async throws -> AnyDecodable? {
         try await client.request("GET", "/v1/directory/listings/\(id)")
     }
+
+    /// A member's public storefront: their profile and their own public listings.
+    public func storefront(slug: String, page: Int = 1) async throws -> AnyDecodable? {
+        try await client.request("GET", "/v1/directory/storefronts/\(slug)?page=\(page)")
+    }
 }
 
 public final class SearchResource {
