@@ -131,6 +131,11 @@ public final class SellersResource {
         try await client.request("POST", "/merchant/sellers/headless", body: ["merchantId": merchantId, "merchantSellerRef": merchantSellerRef, "name": name], extraHeaders: idempotencyHeader(idempotencyKey))
     }
 
+    /// Redeem a customer's TBBN link code, naming your own reference for them (optional).
+    public func redeemLinkCode(code: String, merchantSellerRef: String? = nil, idempotencyKey: String? = nil) async throws -> AnyDecodable? {
+        try await client.request("POST", "/merchant/sellers/link-code", body: ["code": code, "merchant_seller_ref": merchantSellerRef], extraHeaders: idempotencyHeader(idempotencyKey))
+    }
+
     public func get(id: String) async throws -> AnyDecodable? {
         try await client.request("GET", "/v1/sellers/\(id)")
     }
