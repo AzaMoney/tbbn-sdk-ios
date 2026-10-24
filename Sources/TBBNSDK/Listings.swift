@@ -30,7 +30,7 @@ public final class ListingsResource {
     }
 
     public func getWants(id: String) async throws -> AnyDecodable? {
-        try await client.request("GET", "/merchant/listings/\(id)/wants")
+        try await client.request("GET", "/v1/listings/\(id)/wants")
     }
 
     public func get(id: String) async throws -> AnyDecodable? {

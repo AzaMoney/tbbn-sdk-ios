@@ -81,6 +81,11 @@ public final class BusinessMerchantLinksResource {
         try await client.request("GET", "/v1/businesses/\(businessId)/merchant-links")
     }
 
+    /// The Businesses a Merchant is linked to (your own Merchant id with an API key).
+    public func listForMerchant(merchantId: String) async throws -> AnyDecodable? {
+        try await client.request("GET", withQuery("/v1/business-merchant-links", ["merchantId": merchantId]))
+    }
+
     public func revoke(businessId: String, linkId: String) async throws -> AnyDecodable? {
         try await client.request("POST", "/v1/businesses/\(businessId)/merchant-links/\(linkId)/revoke")
     }
