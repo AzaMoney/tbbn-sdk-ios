@@ -92,7 +92,7 @@ public final class BusinessMerchantLinksResource {
 }
 
 /// TBBN Space — search, booking terms and bookings. Construct the client with a Space API key
-/// (`sk_space_...`) to book for clients without a TBBN account.
+/// (`tbbn_sk_space_...`) to book for clients without a TBBN account.
 public final class SpaceResource {
     private unowned let client: TbbnClient
     init(client: TbbnClient) { self.client = client }

@@ -2,7 +2,7 @@
 // webhook delivery. Run against the sandbox with a sandbox key. TbbnClient is an actor, so every
 // call is `async throws` — call it from a Task or any async context.
 //
-//   TBBN_API_KEY=sk_sandbox_... TBBN_MERCHANT_ID=... TBBN_SELLER_ID=... swift run
+//   TBBN_API_KEY=tbbn_sk_sandbox_... TBBN_MERCHANT_ID=... TBBN_SELLER_ID=... swift run
 import Foundation
 import TBBNSDK
 

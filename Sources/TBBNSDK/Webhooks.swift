@@ -3,18 +3,22 @@ import Crypto
 
 private let replayWindowSeconds: Double = 5 * 60
 
-/// Verifies the X-TBBN-Signature header format `t=<unix_ts>,v1=<hmac_sha256_hex>`. See
-/// docs/architecture/event-webhook-catalog.md. Ported faithfully from
+/// Verifies the X-TBBN-Signature header format `t=<unix_ts>,v1=<hmac_sha256_hex>`. For a day after
+/// a signing secret is rotated the header carries a `v1` for each secret; matching any one is
+/// enough. See docs/architecture/event-webhook-catalog.md. Ported faithfully from
 /// packages/sdk-js/src/webhooks.ts — same algorithm, same replay window. Uses swift-crypto
 /// (Apple's own HMAC implementation, cross-platform).
 public func verifyWebhookSignature(rawBody: String, signatureHeader: String, signingSecret: String, now: Double = Date().timeIntervalSince1970) -> Bool {
-    var parts: [String: String] = [:]
+    var timestampStr: String?
+    var signatures: [String] = []
     for pair in signatureHeader.split(separator: ",") {
         let kv = pair.split(separator: "=", maxSplits: 1)
-        if kv.count == 2 { parts[String(kv[0])] = String(kv[1]) }
+        guard kv.count == 2 else { continue }
+        if kv[0] == "t" { timestampStr = String(kv[1]) }
+        if kv[0] == "v1" { signatures.append(String(kv[1])) }
     }
 
-    guard let timestampStr = parts["t"], let timestamp = Double(timestampStr), let signature = parts["v1"] else {
+    guard let timestampStr, let timestamp = Double(timestampStr), !signatures.isEmpty else {
         return false
     }
     guard abs(now - timestamp) <= replayWindowSeconds else { return false }
@@ -24,7 +28,7 @@ public func verifyWebhookSignature(rawBody: String, signatureHeader: String, sig
     let expected = HMAC<SHA256>.authenticationCode(for: message, using: key)
     let expectedHex = expected.map { String(format: "%02x", $0) }.joined()
 
-    return constantTimeEquals(expectedHex, signature)
+    return signatures.contains { constantTimeEquals(expectedHex, $0) }
 }
 
 private func constantTimeEquals(_ a: String, _ b: String) -> Bool {

@@ -24,7 +24,7 @@ In Xcode: **File → Add Package Dependencies…** and paste
 ```swift
 import TBBNSDK
 
-let client = TbbnClient(baseUrl: "https://api.tbbnetwork.com", apiKey: "sk_sandbox_...")
+let client = TbbnClient(baseUrl: "https://api.tbbnetwork.com", apiKey: "tbbn_sk_sandbox_...")
 
 let listing = try await client.listings.upsert([
     "merchantId": "...",
@@ -50,7 +50,7 @@ complete runnable walkthrough is in [`example/Basic.swift`](./example/Basic.swif
 Pass either an **API key** (`apiKey`, issued to your merchant at
 [merchants.tbbnetwork.com](https://merchants.tbbnetwork.com)) or a **session token**
 (`accessToken`, obtained through one of the `auth` sign-in flows). Sandbox keys
-(`sk_sandbox_…`) work against the same API and never touch live data.
+(`tbbn_sk_sandbox_…`) work against the same API and never touch live data.
 
 ## Webhooks
 
