@@ -202,7 +202,20 @@ public final class OAuthLinkResource {
         try await client.request("GET", "/v1/link/oauth/clients/\(clientId)")
     }
 
-    public func token(code: String, clientId: String, clientSecret: String, redirectUri: String, codeVerifier: String? = nil) async throws -> AnyDecodable? {
+    /// Send the linking request from your server first; the browser then carries only request_uri.
+    public func pushRequest(clientId: String, clientSecret: String, redirectUri: String, codeChallenge: String, merchantSellerRef: String? = nil) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/link/oauth/par", body: [
+            "client_id": clientId,
+            "client_secret": clientSecret,
+            "redirect_uri": redirectUri,
+            "scope": "link:seller",
+            "code_challenge": codeChallenge,
+            "code_challenge_method": "S256",
+            "merchant_seller_ref": merchantSellerRef,
+        ])
+    }
+
+    public func token(code: String, clientId: String, clientSecret: String, redirectUri: String, codeVerifier: String? = nil, merchantSellerRef: String? = nil) async throws -> AnyDecodable? {
         try await client.request("POST", "/v1/link/oauth/token", body: [
             "grant_type": "authorization_code",
             "code": code,
@@ -210,6 +223,7 @@ public final class OAuthLinkResource {
             "client_secret": clientSecret,
             "redirect_uri": redirectUri,
             "code_verifier": codeVerifier,
+            "merchant_seller_ref": merchantSellerRef,
         ])
     }
 }
