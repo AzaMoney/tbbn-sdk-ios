@@ -91,6 +91,7 @@ public actor TbbnClient {
     public lazy var oauthLink = OAuthLinkResource(client: self)
     public lazy var businesses = BusinessesResource(client: self)
     public lazy var branches = BranchesResource(client: self)
+    public lazy var translations = TranslationsResource(client: self)
     public lazy var platformOAuth = PlatformOAuthResource(client: self)
     public lazy var tradeIns = TradeInsResource(client: self)
     public lazy var tradeCredits = TradeCreditsResource(client: self)

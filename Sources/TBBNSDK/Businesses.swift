@@ -340,3 +340,21 @@ public final class PlatformOAuthResource {
         try await client.request("POST", "/v1/platform-oauth/revoke", body: input)
     }
 }
+
+/// What people wrote, in another language. Public.
+public final class TranslationsResource {
+    private unowned let client: TbbnClient
+    init(client: TbbnClient) { self.client = client }
+
+    public func available() async throws -> AnyDecodable? {
+        try await client.request("GET", "/v1/directory/translations/available")
+    }
+
+    public func listing(id: String, lang: String) async throws -> AnyDecodable? {
+        try await client.request("GET", "/v1/directory/translations/listings/\(id)?lang=\(lang)")
+    }
+
+    public func storeBio(slug: String, lang: String) async throws -> AnyDecodable? {
+        try await client.request("GET", "/v1/directory/translations/storefronts/\(slug)?lang=\(lang)")
+    }
+}
