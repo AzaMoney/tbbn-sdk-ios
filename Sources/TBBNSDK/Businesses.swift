@@ -256,3 +256,87 @@ public final class StatusResource {
         try await client.request("GET", "/v1/status")
     }
 }
+
+/// A Business's locations, for a chain's own systems, with a Space API key.
+public final class LocationsResource {
+    private unowned let client: TbbnClient
+    init(client: TbbnClient) { self.client = client }
+
+    public func list() async throws -> AnyDecodable? {
+        try await client.request("GET", "/v1/locations")
+    }
+
+    public func importBatch(_ input: [String: Any?]) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/locations/batch", body: input)
+    }
+
+    public func get(id: String) async throws -> AnyDecodable? {
+        try await client.request("GET", "/v1/locations/\(id)")
+    }
+
+    public func update(id: String, _ input: [String: Any?]) async throws -> AnyDecodable? {
+        try await client.request("PATCH", "/v1/locations/\(id)", body: input)
+    }
+
+    public func setStatus(id: String, _ input: [String: Any?]) async throws -> AnyDecodable? {
+        try await client.request("PATCH", "/v1/locations/\(id)/status", body: input)
+    }
+
+    public func createConnectionToken(id: String, _ input: [String: Any?]) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/locations/\(id)/connection_tokens", body: input)
+    }
+}
+
+/// Credit a store gives for a trade-in and spends on its own till. TBBN only keeps the record.
+public final class TradeCreditsResource {
+    private unowned let client: TbbnClient
+    init(client: TbbnClient) { self.client = client }
+
+    public func issue(_ input: [String: Any?]) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/trade_credits", body: input)
+    }
+
+    public func list() async throws -> AnyDecodable? {
+        try await client.request("GET", "/v1/trade_credits")
+    }
+
+    public func get(id: String) async throws -> AnyDecodable? {
+        try await client.request("GET", "/v1/trade_credits/\(id)")
+    }
+
+    public func redeem(id: String, _ input: [String: Any?]) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/trade_credits/\(id)/redeem", body: input)
+    }
+
+    public func cancel(id: String) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/trade_credits/\(id)/void")
+    }
+}
+
+/// An item accepted at the counter becomes your listing at that location.
+public final class TradeInsResource {
+    private unowned let client: TbbnClient
+    init(client: TbbnClient) { self.client = client }
+
+    public func accept(_ input: [String: Any?]) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/trade_ins", body: input)
+    }
+}
+
+/// "Connect to TBBN" for a software vendor's server, with its client secret.
+public final class PlatformOAuthResource {
+    private unowned let client: TbbnClient
+    init(client: TbbnClient) { self.client = client }
+
+    public func pushRequest(_ input: [String: Any?]) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/platform-oauth/par", body: input)
+    }
+
+    public func token(_ input: [String: Any?]) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/platform-oauth/token", body: input)
+    }
+
+    public func revoke(_ input: [String: Any?]) async throws -> AnyDecodable? {
+        try await client.request("POST", "/v1/platform-oauth/revoke", body: input)
+    }
+}
